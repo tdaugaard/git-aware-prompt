@@ -20,7 +20,16 @@ find_git_dirty() {
   fi
 }
 
-PROMPT_COMMAND="find_git_branch; find_git_dirty; $PROMPT_COMMAND"
+find_git_stash() {
+  local status=$(git stash list 2>/dev/null | wc --lines)
+  if [[ $status -gt 0 ]]; then
+    git_stash=" @{$status}"
+  else
+    git_stash=''
+  fi
+}
+
+PROMPT_COMMAND="find_git_branch; find_git_dirty; find_git_stash; $PROMPT_COMMAND"
 
 # Default Git enabled prompt with dirty state
 # export PS1="\u@\h \w \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
